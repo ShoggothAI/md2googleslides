@@ -96,10 +96,18 @@ parser.addArgument(['-c', '--copy'], {
   dest: 'copy',
   required: false,
 });
-parser.addArgument(['--use-fileio'], {
-  help: 'Acknolwedge local and generated images are uploaded to https://file.io',
+parser.addArgument(['--use-cloud-upload'], {
+  help: 'Acknowledge local and generated images are uploaded to Cloudinary (requires CLOUDINARY_* env variables)',
   action: 'storeTrue',
-  dest: 'useFileio',
+  dest: 'useCloudUpload',
+  required: false,
+});
+
+// Keep the old option for backward compatibility, but mark as deprecated
+parser.addArgument(['--use-fileio'], {
+  help: 'DEPRECATED: Use --use-cloud-upload instead',
+  action: 'storeTrue',
+  dest: 'useFileioDeprecated',
   required: false,
 });
 
@@ -210,9 +218,17 @@ function generateSlides(slideGenerator) {
   const input = fs.readFileSync(source, {encoding: 'UTF-8'});
   const css = loadCss(args.style);
 
+  // Support both the new option and the deprecated one for backward compatibility
+  const useCloudUpload = args.useCloudUpload || args.useFileioDeprecated;
+
+  // Show a deprecation warning if the old option is used
+  if (args.useFileioDeprecated && !args.useCloudUpload) {
+    console.warn('WARNING: --use-fileio is deprecated. Please use --use-cloud-upload instead.');
+  }
+
   return slideGenerator.generateFromMarkdown(input, {
     css: css,
-    useFileio: args.useFileio,
+    useFileio: useCloudUpload, // Keep the same parameter name for backward compatibility
   });
 }
 

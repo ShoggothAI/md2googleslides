@@ -14,7 +14,7 @@
 
 import Debug from 'debug';
 import renderSVG from './svg';
-import renderMathJax from './/mathjax';
+import renderMathJax from './mathjax';
 import {ImageDefinition} from '../slides';
 import assert from 'assert';
 

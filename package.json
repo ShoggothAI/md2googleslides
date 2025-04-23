@@ -44,6 +44,7 @@
     "@google-cloud/local-auth": "^2.1.1",
     "argparse": "^2.0.0",
     "babel-polyfill": "^6.26.0",
+    "cloudinary": "^2.6.0",
     "debug": "^4.1.1",
     "extend": "^3.0.0",
     "file-url": "^3.0.0",
