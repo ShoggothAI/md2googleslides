@@ -67,7 +67,7 @@ md2gslides slides.md -nea FILE_ID -t "Talk Title"
 ```
 
 
-Images (see syntax below) are expected to be online (have URLs), but if you have local files you wish you use the `--use-fileio` option. More info on this option down below in the [Local images](#local-images) section.
+Images (see syntax below) are expected to be online (have URLs), but if you have local files you wish to use, use the `--use-cloud-upload` option. More info on this option down below in the [Local images](#local-images) section.
 
 
 ## Supported markdown rules
@@ -373,15 +373,35 @@ Birds  | 16 million
 
 ### Local images
 
-Images referencing local paths temporarily uploaded and hosted to [file.io](https://file.io). File.io is an ephemeral file serving service that generates short-lived random URLs to the upload file and deletes content shortly after use.
+Images referencing local paths are temporarily uploaded and hosted on [Cloudinary](https://cloudinary.com), a cloud-based image management service.
 
-Since local images are uploaded to a third party, explicit opt-in is required to use this feature. Include the `--use-fileio` option to opt-in to uploading images. This applies to file-based images as well
-as automatically rasterized content like math expressions and SVGs.
+Since local images are uploaded to a third party, explicit opt-in is required to use this feature. Include the `--use-cloud-upload` option to opt-in to uploading images. This applies to file-based images as well as automatically rasterized content like math expressions and SVGs.
 
+#### Cloudinary Configuration
+
+To use the cloud upload feature, you need to set up the following environment variables with your Cloudinary credentials:
+
+```
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
+```
+
+You can obtain these credentials by signing up for a free Cloudinary account at [cloudinary.com](https://cloudinary.com).
+
+One way to set these environment variables is to create a `.env` file in the same directory as your `slides.md` file with the following content:
+
+```
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
+```
+
+and then run the commands like `source .env && md2gslides slides.md --use-cloud-upload`
 
 ### Image rasterization
 
-Slides can also include generated images, using `$$$` fenced blocks for the data. Currently supported generated images are math expression (TeX and MathML) as well as SVG. Rasterized images are treated like local images are require opt-in to uploading images to a 3rd party service via the `--use-fileio` option.
+Slides can also include generated images, using `$$$` fenced blocks for the data. Currently supported generated images are math expression (TeX and MathML) as well as SVG. Rasterized images are treated like local images and require opt-in to uploading images to a 3rd party service via the `--use-cloud-upload` option.
 
 Using TeX:
 
@@ -415,7 +435,7 @@ $$$ svg
 $$$
 </pre>
 
-Like local images, generated images are temporarily served via file.io.
+Like local images, generated images are temporarily served via Cloudinary.
 
 Pull requests for other image generators (e.g. mermaid, chartjs, etc.) are welcome!
 
